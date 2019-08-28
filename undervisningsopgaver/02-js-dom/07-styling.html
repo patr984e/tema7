@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        .firkant {
+            height: 200px;
+            width: 200px;
+            background-color: green;
+            text-align: center;
+            line-height: 250px;
+        }
+
+        .cirkel {
+            height: 200px;
+            width: 200px;
+            border-radius: 50%;
+            background-color: red;
+            text-align: center;
+            line-height: 250px;
+
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="firkant"></div>
+    <div class="cirkel"></div>
+    <script>
+        const firkant = document.querySelector(".firkant");
+
+        const cirkel = document.querySelector(".cirkel");
+        document.addEventListener("DOMContentLoaded", start);
+
+        let gris = `http://mabe-kea.dk/E19/pics/pig.png`;
+        let frø = `http://mabe-kea.dk/E19/pics/frog.png`;
+        let ræv = `http://mabe-kea.dk/E19/pics/fox.png`;
+
+        function start() {
+            console.log("start");
+
+
+
+
+
+            firkant.removeEventListener("click", start);
+            firkant.innerHTML = `<img src= ${gris} alt=>`;
+            cirkel.innerHTML = `<img src= ${frø} alt=>`;
+
+            firkant.addEventListener("click", skift);
+            cirkel.addEventListener("click", stop);
+
+
+
+
+        }
+
+        function skift() {
+            console.log("skift");
+            firkant.removeEventListener("click", skift);
+            firkant.innerHTML = `<img src= ${frø} alt=>`;
+            cirkel.innerHTML = `<img src= ${gris} alt=>`;
+            firkant.addEventListener("click", start);
+            cirkel.addEventListener("click", stop);
+
+
+        }
+
+        function stop() {
+            console.log("stop");
+            firkant.removeEventListener("click", skift);
+            firkant.removeEventListener("click", start);
+                        firkant.style.backgroundColor = "red";
+                        cirkel.style.backgroundColor = "green";
+                        cirkel.style.transition = "1.5s";
+                        cirkel.style.transform = "scale(0)";
+        }
+    </script>
+
+
+</body></html>
