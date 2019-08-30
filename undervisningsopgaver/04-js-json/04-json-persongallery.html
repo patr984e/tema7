@@ -34,7 +34,7 @@
         <article class="person">
             <h2 class="navn"> </h2>
             <img class="billede" alt="">
-            <p class="github">github: </p>
+            <a class="github">github: </a>
             <p class="alder">Alder: </p>
             <p class="køn">Køn: </p>
             <p class="hold">hold: </p>
@@ -74,6 +74,7 @@
                 klon.querySelector("img").src = person.gsx$billede.$t;
                 klon.querySelector("img").alt = "Billede af " + person.gsx$navn.$t;
                 klon.querySelector(".github").textContent += person.gsx$github.$t;
+                klon.querySelector("a").href = "https://github.com/" + person.gsx$github.$t;
                 klon.querySelector(".alder").textContent += person.gsx$alder.$t;
                 klon.querySelector(".køn").textContent += person.gsx$køn.$t;
                 klon.querySelector(".hold").textContent += person.gsx$hold.$t;
