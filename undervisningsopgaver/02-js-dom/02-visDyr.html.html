@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="">
+</head>
+
+
+<body>
+    <article id="dyr">
+        <h3></h3>
+        <img src="" alt="">
+        <p>type: </p>
+        <p>Levested: </p>
+    </article>
+
+
+    <script>
+        const dyr = {
+            navn: "gris",
+            type: "pattedyr",
+            billede: "http://mabe-kea.dk/E19/pics/pig.png",
+            levested: "svinefarm"
+        }
+        const h3 = document.querySelector("h3");
+        const img = document.querySelector("img");
+        const p1 = document.querySelector("p");
+        const p2 = document.querySelector(`p:nth-of-type(2)`);
+
+
+        h3.textContent = dyr.navn;
+
+        img.src = dyr.billede;
+
+        p1.textContent += dyr.type;
+
+        p2.textContent += dyr.levested;
+
+
+
+
+
+
+
+        console.log(dyr);
+    </script>
+</body></html>
