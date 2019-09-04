@@ -1,0 +1,79 @@
+ let retter;
+ document.addEventListener("DOMContentLoaded", getJson);
+ async function getJson() {
+ //henter json
+ let jsonData = await fetch("https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json");
+
+ console.log(jsonData)
+ retter = await jsonData.json();
+ console.log(retter)
+ visRetter(retter, "Menu");
+
+ let forretter = retter.filter(ret => ret.gsx$kategori.$t == "forretter");
+ let hovedretter = retter.filter(ret => ret.gsx$kategori.$t == "hovedretter");
+ let desserter = retter.filter(ret => ret.gsx$kategori.$t == "desserter");
+ let drikkevarer = retter.filter(ret => ret.gsx$kategori.$t == "drikkevarer");
+
+ document.querySelector("#sorter-alle").addEventListener("click", () => {
+ console.log(retter);
+
+ visRetter(retter, "Menu");
+ });
+
+ document.querySelector("#sorter-forretter").addEventListener("click", () => {
+ console.log(forretter);
+ visRetter(forretter, "Forretter");
+ });
+ document.querySelector("#sorter-hovedretter").addEventListener("click", () => {
+ visRetter(hovedretter, "Hovedretter");
+ });
+ document.querySelector("#sorter-desserter").addEventListener("click", () => {
+ visRetter(desserter, "Desserter");
+ });
+ document.querySelector("#sorter-drikkevarer").addEventListener("click", () => {
+ visRetter(drikkevarer, "Drikkevarer");
+ });
+
+
+ }
+
+ function visRetter(vistRet, overskrift) {
+ let menuTemplate = document.querySelector("template");
+ let templateContainer = document.querySelector(".container");
+ templateContainer.innerHTML = "";
+
+ document.querySelector("data-overskrift").textContent = overskrift;
+
+ retAtvise.forEach(hverRet => {
+ let klon = menuTemplate.cloneNode(true).content;
+ klon.querySelector("ret-navn").textContent = hverRet.gsx$navn.$t;
+ klon.querySelector("ret-kort").textContent = hverRet.gsx$kort.$t;
+ klon.querySelector("ret-pris").textContent = hverRet.gsx$pris.$t;
+ klon.querySelector("ret-billede").src = `imgs/large/${hverRet.gsx$pris.$t}.jpg`;
+ klon.querySelector("ret-id").setAttribute("ret-id", hverRet.gsx$id.$t);
+ templateContainer.appendChild(klon);
+ templateContainer.lastElementChild.addEventListener("click", visSingle);
+ });
+ }
+
+ function visSingle() {
+ //console.log(vis single);
+ let my_id = this.getAttribute("ret-id");
+ let single = retter.find(ret => {
+ console.log(ret.gsx$id.$t);
+ if (my_id == ret.gsx$id.$t) {
+ document.querySelector("#popup").style.visibility = "visible";
+ document.querySelector("ret-titel").textContent = ret.navn;
+ document.querySelector("ret-singleimg").setAttribute("src", "imgs/large/" + ret.gsx$billede.$t);
+ document.querySelector("ret-beskrivelse").textContent = ret.langbeskrivelse;
+ }
+ });
+ }
+
+ function toggleMenu() {
+ document.querySelector(".burger").classList.toggle("skift");
+ document.querySelector("nav").classList.toggle("vis");
+
+ }
+ document.querySelector(".burger").addEventListener("click", toggleMenu);
+ document.querySelector("nav").addEventListener("click", toggleMenu);

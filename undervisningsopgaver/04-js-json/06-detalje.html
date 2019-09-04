@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        img {
+            width: 100%;
+        }
+
+        #liste {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-gap: 1em;
+        }
+
+        .person {
+            padding: 1em;
+            border: 1px solid;
+            cursor: pointer;
+        }
+
+        .valgt {
+            background-color: red;
+        }
+
+        #detalje {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: hsla(60, 26%, 18%, 0.72);
+            overflow: scroll;
+        }
+
+        #detalje .luk {
+            position: fixed;
+            top: 0%;
+            left: 0%;
+            font-size: 4rem;
+            cursor: pointer;
+            border-radius: 50px;
+        }
+
+        #detalje .person {
+            width: 60vw;
+            min-height: 50vh;
+            margin: 4rem auto;
+            padding: 4rem;
+            background: white;
+
+        }
+    </style>
+</head>
+
+<body>
+    <!--
+    <section id="detalje">
+        <article class="person">
+            <button class="luk">;^D tryk på mig hvis du vil tilbage igen!</button>
+            <h2>
+            </h2>
+            <img src="" alt="">
+            <p> Github:
+                <a class="githubLink" href="">
+                </a>
+            </p>
+        </article>
+    </section>
+-->
+
+    <section id="detalje">
+        <article class="person">
+            <button class="luk">;^D tryk på mig hvis du vil tilbage igen!</button>
+            <h2>Hønse West
+            </h2>
+            <img src="http://kvikea.dk/pix1.jpg" alt="">
+            <p> Github:
+                <a class="githubLink" href="">
+                </a>
+            </p>
+        </article>
+    </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", start);
+        const urlParams = new URLSeachParams(window.location, search);
+        const github = urlParams.get("github");
+        console.log(github);
+
+        let personer;
+        const url = `https://spreadsheets.google.com/feeds/list/1Xge7slZ9dEOTCn1Yxl3OE4xgvrXOL8Y_iu3WN1yGB1U/od6/public/values?alt=json`;
+
+
+        function start()
+        document.querySelector(".luk").addEventListener("click", () => {
+            window.history.back();
+        })
+        //        loadData();
+    </script>
+</body></html>

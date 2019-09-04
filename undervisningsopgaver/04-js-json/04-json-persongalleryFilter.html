@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>DyrJson</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .dyr {
+            border: 1px solid silver;
+            padding: 20px;
+        }
+
+        section {
+            width: 80vw;
+            margin: 1vw auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-gap: 2rem;
+            /*  */
+        }
+
+        article img {
+            width: 100%;
+        }
+
+        header {
+            left: 50%;
+        }
+
+        button {
+            border-radius: 20px;
+            left: 50vw;
+
+
+        }
+
+        .valgt {
+            background-color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>HEJ MED DIG</h1>
+    <header>
+        <button data-køn="alle" class="valgt">Alle</button>
+        <button data-køn="k">Kvinder</button>
+        <button data-køn="m">Mænd</button>
+        <button data-køn="andet">Andre</button>
+    </header>
+    <section id="liste"></section>
+
+    <template>
+        <article class="person">
+            <h2 class="navn"></h2>
+            <img class="billede" alt="">
+            <a class="github">github: </a>
+            <p class="alder">Alder: </p>
+            <p class="køn">Køn: </p>
+            <p class="hold">hold: </p>
+            <p class="historie">Historie: </p>
+        </article>
+    </template>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", start);
+        const temp = document.querySelector("template").content;
+        const klon = temp.cloneNode(true);
+        const filterKnapper = document.querySelectorAll("button");
+
+        const dest = document.querySelector("#liste");
+        let personGallery = [];
+        let filter = "alle";
+
+        const jsonUrl = "https://spreadsheets.google.com/feeds/list/1Xge7slZ9dEOTCn1Yxl3OE4xgvrXOL8Y_iu3WN1yGB1U/od6/public/values?alt=json";
+        //første funktion der kaldes efter DOM er loaded//
+        function start() {
+
+
+            filterKnapper.forEach(knap => knap.addEventListener("click", filtrer));
+
+            hentJson();
+        }
+
+
+        //en funktion der filtrerer personer//
+        function filtrer() {
+            filter = this.dataset.køn;
+
+            document.querySelector(".valgt").classList.remove("valgt");
+            this.classList.add("valgt");
+            console.log("filter");
+
+            filter = this.dataset.køn;
+            visJson();
+
+        }
+
+        //første funktion der henter data fra google sheets (url) //
+        async function hentJson() {
+
+
+
+            let response = await fetch(jsonUrl);
+            console.log(response);
+            personGallery = await response.json();
+            console.log(personGallery);
+            visJson();
+        }
+
+
+        //funktion der viser data i liste view//
+        function visJson() {
+
+
+            personGallery.feed.entry.forEach(person => {
+
+                dest.textContent = " ";
+
+                if (
+                    person.gsx$køn.$t == filter || filter == "alle") {
+
+
+                    // console.log(klon);
+
+                    klon.querySelector("h2").textContent = person.gsx$navn.$t;
+                    klon.querySelector("img").src = person.gsx$billede.$t;
+                    klon.querySelector("img").alt = "Billede af " + person.gsx$navn.$t;
+                    klon.querySelector(".github").textContent += person.gsx$github.$t;
+                    klon.querySelector("a").href = "https://github.com/" + person.gsx$github.$t;
+                    klon.querySelector(".alder").textContent += person.gsx$alder.$t;
+                    klon.querySelector(".køn").textContent += person.gsx$køn.$t;
+                    klon.querySelector(".hold").textContent += person.gsx$hold.$t;
+                    klon.querySelector(".historie").textContent += person.gsx$historie.$t;
+
+                    dest.appendChild(klon);
+
+
+                }
+
+            });
+        }
+    </script>
+</body></html>
