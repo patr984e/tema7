@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+</head>
+<style>
+    body {
+        background-color: #f5f4f1;
+    }
+
+    #detalje .person {
+        width: 60vw;
+        min-height: 50vh;
+        margin: 4rem auto;
+        padding: 2em;
+        background: hsl(0, 74%, 60%);
+        border-radius: 10%;
+        padding-left: 3em;
+
+
+    }
+
+    #detalje img {
+        max-width: 55vw;
+
+    }
+
+    .menuKnap {
+        border-radius: 10%;
+        cursor: pointer;
+
+    }
+
+    p {
+        font-family: cur sive;
+    }
+
+    #detalje {
+        width: 55vw;
+        height: auto;
+        padding: 20px;
+        align-items: center;
+        border-style: solid;
+        border-radius: 20px;
+        margin-left: 20vw;
+    }
+
+    .tilbage {
+        font-family: fantasy;
+        font-size: 1.5rem;
+        border-radius: 20px;
+        box-shadow: 5px 6px 9px purple;
+        cursor: pointer;
+        color: darkgoldenrod;
+        background-color: black;
+    }
+
+    @media only screen and (max-width: 600px) {
+        #detalje {
+            margin-left: 15vw;
+        }
+</style>
+
+
+<body>
+    <main id="singleView">
+        <button class="tilbage">Back</button>
+        <section class="indhold">
+            <article id="detalje">
+                <h2 class="navn"></h2>
+                <img src="" alt="" class="billede">
+                <p class="lang"></p>
+                <p class="oprindelse"></p>
+                <p class="pris"></p>
+
+            </article>
+        </section>
+    </main>
+
+    <script>
+        let urlParams = new URLSearchParams(window.location.search);
+        let id = urlParams.get("id");
+        let personer;
+        document.addEventListener("DOMContentLoaded", loadData);
+
+        async function loadData() {
+            let loadData = await fetch("https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json");
+
+            personer = await loadData.json();
+            visDetalje();
+
+        }
+
+        function visDetalje() {
+
+            personer.feed.entry.forEach(person => {
+                if (person.gsx$id.$t == id) {
+
+
+
+
+                    //                    document.querySelector("#detalje").style.display = "block";
+                    document.querySelector("#detalje h2").textContent = person.gsx$navn.$t;
+                    document.querySelector("#detalje .billede").src = `imgs/large/${person.gsx$billede.$t}.jpg`;
+                    document.querySelector("#detalje .billede").alt = person.gsx$navn.$t;
+                    document.querySelector("#detalje .lang").textContent = person.gsx$lang.$t;
+                    document.querySelector("#detalje .oprindelse").textContent = person.gsx$oprindelse.$t;
+                    document.querySelector("#detalje .pris").textContent = `pris: ${person.gsx$pris.$t},-`;
+                };
+            });
+
+        }
+
+        document.querySelector(".tilbage").addEventListener("click", () => {
+            window.history.back();
+        })
+    </script>
+</body></html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0vw;
+        }
+
+        body {
+            background-color: #f5f4f1;
+        }
+
+
+
+        img {
+            width: 100%;
+            border-radius: 10%;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+        }
+
+        .menu {
+            margin-left: 15vw;
+
+
+
+        }
+
+        #liste {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            grid-gap: 1em;
+            margin-left: 15vw;
+            margin-right: 15vw;
+
+        }
+
+        .person {
+            padding: 2em;
+            border: 5px solid black;
+            border-style: groove;
+            cursor: pointer;
+            border-radius: 10%;
+        }
+
+        .menuKnap {
+            border-radius: 10%;
+            cursor: pointer;
+
+
+        }
+
+        .valgt {
+            background-color: red;
+            padding: 1em;
+
+
+        }
+
+        @media only screen and (max-width: 600px) {
+            #liste {
+                margin-left: 10vw;
+            }
+
+            .menu {
+                margin-left: 10vw;
+            }
+        }
+
+        /*
+        #detalje {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: hsla(60, 26%, 18%, 0.72);
+            overflow: scroll;
+
+        }
+*/
+
+        /*
+        #detalje .luk {
+            position: fixed;
+            top: 0%;
+            right: 0%;
+            font-size: 4rem;
+            cursor: pointer;
+            border-radius: 50px;
+        }
+*/
+
+        #detalje .person {
+            width: 60vw;
+            min-height: 50vh;
+            margin: 4rem auto;
+            padding: 2em;
+            background: hsl(0, 74%, 60%);
+            border-radius: 10%;
+            padding-left: 3em;
+
+
+        }
+
+        #detalje img {
+            max-width: 55vw;
+
+        }
+
+
+
+        p {
+            font-family: cursive;
+        }
+
+        .splash {
+            background-image: url(imgs/1x/Artboard%201.png);
+            width: 100%;
+            height: 60vh;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+
+
+
+
+        }
+
+
+
+        /*
+        .h1box {
+            left: 35vw;
+            background-color: black;
+            width: 650px;
+            height: 200px;
+            position: absolute;
+            margin-top: 200px;
+            border-radius: 20px;
+        }
+*/
+
+        /*
+        h1 {
+            font-size: 5rem;
+            text-decoration: underline;
+            color: red;
+            text-shadow: 2px 2px 3px #fff;
+
+        }
+*/
+
+    </style>
+</head>
+
+<body>
+    <div class="splash">
+
+    </div>
+
+
+    <div class="menu">
+        <h2>Menu</h2>
+        <nav>
+            <button data-kategori="alle" class="valgt menuKnap">Alle</button>
+            <button data-kategori="forretter" class="menuKnap">Forretter</button>
+            <button data-kategori="hovedretter" class="menuKnap">Hovedretter</button>
+            <button data-kategori="desserter" class="menuKnap">Desserter</button>
+            <button data-kategori="drikkevarer" class="menuKnap">Drikkevarer</button>
+        </nav>
+    </div>
+
+    <br>
+
+    <section id="liste"></section>
+
+    <section id="detalje">
+        <article class="person">
+            <button class="luk">X</button>
+            <h2></h2>
+            <img src="" alt="">
+            <p class="lang">
+            </p>
+
+            <p class="pris-detalje"></p>
+        </article>
+    </section>
+
+    <template>
+        <article class="person">
+            <img src="" alt="" class="small-billede">
+            <h2 class="navn"></h2>
+            <br>
+            <p class="kort"></p>
+
+            <p class="pris"></p>
+
+        </article>
+    </template>
+    <script>
+        document.addEventListener("DOMContentLoaded", start);
+        const url = `https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json`;
+        let personer;
+        let filter = "alle";
+        // første funktion der kaldes efter DOM er loaded
+        function start() {
+            const filterKnapper = document.querySelectorAll("nav button");
+            filterKnapper.forEach(knap => knap.addEventListener("click", filtrerPersoner));
+            //            document.querySelector("#detalje").style.display = "none";
+            skjulDetalje();
+
+            loadData();
+        }
+        // funktion der filtrerer personer (json)
+        function filtrerPersoner() {
+            filter = this.dataset.kategori; // sæt variabel "filter" til aktuel værdi
+            document.querySelector(".valgt").classList.remove("valgt"); // fjern klassen valgt fra aktuel knap
+            this.classList.add("valgt") // marker den nyvalgte knap
+            vis(); // kald funktionen vis igen med nyt filter
+        }
+        // funktion der henter data fra Google sheet (via url)
+        async function loadData() {
+            const response = await fetch(url);
+            personer = await response.json();
+            vis();
+        }
+        //funktion der viser personer i liste view
+        function vis() {
+            const dest = document.querySelector("#liste"); // container til articles med en person
+            const skabelon = document.querySelector("template").content; // select indhold af html skabelon (article)
+            dest.textContent = "";
+            personer.feed.entry.forEach(person => { // loop igennem json (personer)
+                if (person.gsx$kategori.$t == filter || filter == "alle") { // tjek hvilket køn personen har og sammenlign med filter eller vis alle
+                    const klon = skabelon.cloneNode(true);
+                    klon.querySelector(".navn").textContent = person.gsx$navn.$t;
+                    klon.querySelector(".pris").textContent = `pris: ${person.gsx$pris.$t},-`;
+                    klon.querySelector(".kort").textContent = person.gsx$kort.$t;
+                    klon.querySelector("img").src = `imgs/small/${person.gsx$billede.$t}-sm.jpg`;
+
+                    klon.querySelector(".person").addEventListener("click", () => {
+                        visDetalje(person);
+                    });
+                    dest.appendChild(klon);
+
+                    dest.lastElementChild.addEventListener("click", () => {
+                        location.href = `03-babushka-single.html?id=${person.gsx$id.$t}`;
+                    });
+                }
+            })
+        }
+
+        function visDetalje(person) {
+            console.log(person);
+            document.querySelector("#detalje").style.display = "block";
+            document.querySelector("#detalje h2").textContent = person.gsx$navn.$t;
+            document.querySelector("#detalje img").src = `imgs/large/${person.gsx$billede.$t}.jpg`;
+            document.querySelector("#detalje img").alt = `retten: ${person.gsx$billede.$t}`;
+            document.querySelector("#detalje .lang").textContent = person.gsx$lang.$t;
+            document.querySelector("#detalje .pris-detalje").textContent = `pris: ${person.gsx$pris.$t},-`;
+
+
+
+
+
+
+
+        }
+
+        function skjulDetalje() {
+            console.log("skjul");
+            document.querySelector("#detalje").style.display = "none";
+
+
+        }
+
+    </script>
+</body>
+
+</html>
