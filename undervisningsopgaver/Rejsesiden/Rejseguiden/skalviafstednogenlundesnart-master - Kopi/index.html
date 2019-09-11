@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Gentium+Book+Basic:700|Source+Sans+Pro&display=swap" rel="stylesheet">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rejse med Prejse</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="loopview mobile">
+
+
+    <template>
+        <article class="destination">
+            <img class="loop_billede">
+            <div class="infoboks" class="hidden">
+                <p class="kort"></p>
+            </div>
+        </article>
+    </template>
+
+    <header>
+
+        <!-- anker "til toppen"-->
+        <a id="overskrift"></a>
+        <div class="splashbillede">
+            <h1>Rejse med Prejse</h1>
+        </div>
+        <h2 class="vælg_kategori">Vælg kategori</h2>
+        <nav>
+            <div id="menuknap">☰</div>
+            <ul id="menu" class="hidden">
+                <li class="filter valgt" data-id="alle">Alle</li>
+                <li class="filter" data-badeferie="nej">Storbyferie</li>
+                <li class="filter" data-badeferie="ja">Badeferie</li>
+                <li class="filter" data-bigmacindex="lav">Billigste priser</li>
+                <li class="filter" data-bigmacindex="høj">Dyreste priser</li>
+            </ul>
+            <div class="nav hidden">
+                <button class="filter valgt" data-kategori="alle">Alle</button>
+                <button class="filter" data-badeferie="nej">Storbyferie</button>
+                <button class="filter" data-badeferie="ja">Badeferie</button>
+                <button class="filter" data-bigmacindex="lav">Billigste priser</button>
+                <button class="filter" data-bigmacindex="høj">Dyreste priser</button>
+            </div>
+        </nav>
+
+        <h1 class="valgt_kategori">Valgt: Alle</h1>
+    </header>
+
+    <section id="liste"></section>
+
+    <div class="top">
+        <button class="topKnap" onclick="window.location.href='#overskrift';">Til toppen</button>
+    </div>
+
+
+    <script src="script.js"></script>
+</body></html>
